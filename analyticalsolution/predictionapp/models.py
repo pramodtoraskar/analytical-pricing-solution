@@ -80,7 +80,6 @@ class ExcelToHdf5(object):
     def create_hdf5_file(self):
         """Create hdf5 file with given filename, return file and table"""
 
-
         # Open a file in "w"rite mode
         self.hdf5_file = tables.openFile(self.hdf5_filename,
                                          mode="w",

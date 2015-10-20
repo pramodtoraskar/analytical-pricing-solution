@@ -5,15 +5,16 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from pandas.io.pytables import Term
 from .models import SeedData, convert_xls_to_hdf5, OilType
 from .forms import UploadSeedDataFileForm
 
 
 def process_df(hdf5_filename):
-    store = pd.HDFStore(hdf5_filename)
 
     oil_type_obj = OilType.objects.get(pk=1)
+
+    store = pd.HDFStore(hdf5_filename)
+
     oil_type = str(re.sub('[^A-Za-z0-9]+', '',oil_type_obj.oil_type)).lower()
     if oil_type_obj.of_series == 1:
         oil_type = '{0}/{1}'.format('data_single_group',oil_type)
@@ -22,10 +23,6 @@ def process_df(hdf5_filename):
 
     df = store[oil_type]
 
-    # pd.read_hdf(hdf5_filename,oil_type)
-    #df = pd.read_hdf(hdf5_filename,oil_type)
-
-    print(df)
     return df
 
 
@@ -67,6 +64,6 @@ def index(request):
     return render_to_response('predictionapp/index.html')
 
 
-if __name__ == '__main__':
-    process_df('/home/ptoraskar/aps-working/analyticalsolution'
-               '/analyticalsolution/database/oil_production1.h5')
+# if __name__ == '__main__':
+#     process_df('/home/ptoraskar/aps-working/analyticalsolution'
+#                '/analyticalsolution/database/oil_production1.h5')
