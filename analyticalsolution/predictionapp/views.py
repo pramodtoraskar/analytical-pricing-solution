@@ -1,58 +1,72 @@
-import numpy as np
+import re
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.conf import settings
+from pandas.io.pytables import Term
+from .models import SeedData, convert_xls_to_hdf5, OilType
+from .forms import UploadSeedDataFileForm
 
-import statsmodels.api as sm
-from statsmodels.tsa.arima_model import ARIMA
 
-from pandas.tseries.index import date_range
+def process_df(hdf5_filename):
+    store = pd.HDFStore(hdf5_filename)
 
-import sqlalchemy, sqlalchemy.orm
+    oil_type_obj = OilType.objects.get(pk=1)
+    oil_type = str(re.sub('[^A-Za-z0-9]+', '',oil_type_obj.oil_type)).lower()
+    if oil_type_obj.of_series == 1:
+        oil_type = '{0}/{1}'.format('data_single_group',oil_type)
+    else:
+        oil_type = '{0}/{1}'.format('data_mul_group',oil_type)
 
-# Create your views here.
+    df = store[oil_type]
 
-engine = sqlalchemy.create_engine('sqlite:///db.sqlite3')
+    # pd.read_hdf(hdf5_filename,oil_type)
+    #df = pd.read_hdf(hdf5_filename,oil_type)
 
-def parse_df():
-    # create an Excel file object
-    excel = pd.ExcelFile('/home/ptoraskar/aps-working/analyticalsolution/inputdata/PET_PRI_SPT_S1_M.xls')
+    print(df)
+    return df
 
-    df = excel.parse(excel.sheet_names[0])
 
-    with engine.connect() as conn, conn.begin():
-        df['Unnamed: 2'][4:9].to_sql('tbl_oil_type1', engine)
-        types_of_oil = pd.read_sql_table('tbl_oil_type1', conn)
+def convert_data():
+    xls_filename = ''
+    hdf5_filename = settings.HDF5_FILENAME
+    seed_data_file_obj = SeedData.objects.all()[0]
+    if seed_data_file_obj:
+        xls_filename = seed_data_file_obj.doc_file.file.name
+    convert_xls_to_hdf5(xls_filename, hdf5_filename)
 
-    print(types_of_oil)
-    return
+    process_df(hdf5_filename)
 
-    # parse the first sheet
 
-    print(excel.sheet_names)
-    for i in excel.sheet_names:
-        print(i)
+def upload_seed_data(request):
+    # Handle file upload
+    if request.method == 'POST':
 
-    #print df
-    #print df.index
-    #print df.columns
-    print
-    return
+        form = UploadSeedDataFileForm(request.POST, request.FILES)
 
-    df = excel.parse(excel.sheet_names[1])
+        if form.is_valid():
+            new_doc = SeedData(doc_file = request.FILES['doc_file'])
+            new_doc.save()
 
-    # rename the columns
-    df = df.rename(columns=dict(zip(df.columns, ['Date', 'WTI', 'Brent'])))
+            convert_data()
 
-    # cut off the first 18 rows because these rows
-    # contain NaN values for the Brent prices
-    df = df[350:]
+            # Redirect to the document list after POST
+            return HttpResponseRedirect(reverse('upload_seed_data'))
+    else:
+        form = UploadSeedDataFileForm() # A empty, unbound form
 
-    with engine.connect() as conn, conn.begin():
-        df.to_sql('data', engine)
-        data = pd.read_sql_table('data', conn)
+    # Render list page with the documents and the form
+    return render_to_response('predictionapp/upload_seeddata.html',
+                              {'form': form},
+                              context_instance=RequestContext(request))
 
-    print(data)
+
+def index(request):
+    return render_to_response('predictionapp/index.html')
+
 
 if __name__ == '__main__':
-    parse_df()
+    process_df('/home/ptoraskar/aps-working/analyticalsolution'
+               '/analyticalsolution/database/oil_production1.h5')
