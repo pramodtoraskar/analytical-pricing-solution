@@ -29,7 +29,7 @@ def process_df(hdf5_filename):
 def convert_data():
     xls_filename = ''
     hdf5_filename = settings.HDF5_FILENAME
-    seed_data_file_obj = SeedData.objects.all()[0]
+    seed_data_file_obj = SeedData.objects.all().reverse()[0]
     if seed_data_file_obj:
         xls_filename = seed_data_file_obj.doc_file.file.name
     convert_xls_to_hdf5(xls_filename, hdf5_filename)

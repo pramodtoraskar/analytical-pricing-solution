@@ -1,5 +1,9 @@
+dj-database-url==0.3.0
+dj-static==0.0.6
 Django==1.8.5
+django-toolbelt==0.0.1
 funcsigs==0.4
+gunicorn==19.3.0
 matplotlib==1.4.3
 mock==1.3.0
 nose==1.3.7
@@ -15,7 +19,10 @@ pytz==2015.6
 scipy==0.16.0
 seaborn==0.6.0
 six==1.10.0
+SQLAlchemy==1.0.8
+static3==0.6.1
 statsmodels==0.6.1
+table==0.0.4
 tables==3.2.2
 wheel==0.24.0
 xlrd==0.9.4
