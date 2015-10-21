@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <meta charset="utf-8">
+                <title>File Upload </title>
+        </head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <body>
+                <!-- Upload form. Note enctype attribute! -->
+                <form action="/prediction/uploadsd/" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p>{{ form.erros }}</p>
+                        <p>{{ form.non_field_errors }}</p>
+                        <p>{{ form.doc_file.label_tag }} </p>
+                        <p>
+                                {{ form.doc_file.errors }}
+                                {{ form.doc_file }}
+                        </p>
+                        <p><input type="submit" value="Upload" /></p>
+                </form>
+
+                <div id="load_oiltype"></div>
+        </body>
+        <script>
+                $(document).ready(function (){
+                    $.ajax({
+                      url: '/prediction/render/graph/',
+                      type: "get",
+                      dataType: "text",
+                      success : function (data) {
+                        $("#load_oiltype").html(data);
+                      }
+                   });
+                });
+        </script>
+</html>
