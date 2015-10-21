@@ -11,7 +11,7 @@ from .forms import UploadSeedDataFileForm
 
 def process_df(hdf5_filename):
 
-    oil_type_obj = OilType.objects.get(pk=1)
+    oil_type_obj = OilType.objects.all()[0]
 
     store = pd.HDFStore(hdf5_filename)
 

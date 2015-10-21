@@ -171,9 +171,10 @@ class ExcelToHdf5(object):
         self.load_xls_data()
 
         for oil_type in self.oil_type_list:
-            oil_type_obj = OilType(oil_type=str(oil_type[0]),
-                                   of_series=int(oil_type[1]))
-            oil_type_obj.save()
+
+            oil_type_obj, created = OilType.objects.get_or_create(
+                oil_type=str(oil_type[0]),
+                of_series=int(oil_type[1]))
 
         self.create_hdf5_file()
 

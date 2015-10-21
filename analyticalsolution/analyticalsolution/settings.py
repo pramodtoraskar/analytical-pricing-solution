@@ -25,11 +25,6 @@ SECRET_KEY = '#f2jiw6s$yj@dsr1y$v#bse3v%gnu6=6m7bs$63-vq+r@1n4yk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
-
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -119,4 +114,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'analyticalsolution/media')
 MEDIA_URL = '/media/'
 
 HDF5_FILENAME = os.path.join(BASE_DIR,
-                             'analyticalsolution/database/oil_production1.h5')
+                             'analyticalsolution/database/oil_production.h5')
