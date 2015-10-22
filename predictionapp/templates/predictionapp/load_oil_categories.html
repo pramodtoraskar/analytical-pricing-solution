@@ -1,0 +1,9 @@
+<h2>Select Oil Type:</h2>
+<select id="oil_categories">
+    {% for oil_type_obj in oil_type_obj_list%}
+        <option
+                id="{{oil_type_obj.id}}"
+                value="{{oil_type_obj.id}}">{{oil_type_obj.oil_type}}
+        </option>
+    {% endfor %}
+</select>

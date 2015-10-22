@@ -1,11 +1,20 @@
 <div>
-    <h2>Select Oil Type:</h2>
-    <select>
-        {% for oil_type_obj in oil_type_obj_list%}
-            <option
-                    id="{{oil_type_obj.id}}"
-                    value="{{oil_type_obj.id}}_{{oil_type_obj.oil_type}}">{{oil_type_obj.oil_type}}
-            </option>
-        {% endfor %}
-    </select>
+    <img class="all_data_graph img_width" src="{{graph_dict.all_data_path}}">
+    <hr style="width: 838px;"/>
+    <input type="radio" name='thing' value='valuable'data-id="three_month_graph" >
+    <span>Three Months </span>
+    <input type="radio" name='thing' value='valuable' data-id="six_month_graph" />
+    <span>Six Months</span>
+    <div id="three_month_graph" class="none">
+        <img class="img_width" src="{{graph_dict.m3_forecast_data_path}}">
+    </div>
+    <div id="six_month_graph" class="none">
+        <img class="img_width" src="{{graph_dict.m6_forecast_data_path}}">
+    </div>
 </div>
+<script>
+$(':radio').change(function (event) {
+    var id = $(this).data('id');
+    $('#' + id).addClass('none').siblings().removeClass('none');
+});
+</script>

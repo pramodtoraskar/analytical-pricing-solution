@@ -5,9 +5,61 @@
                 <title>File Upload </title>
         </head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <body>
+        <style>
+            .img_width{
+                width:600px;
+            }
+            .all_data_graph{
+
+            }
+            .none {
+                display:none;
+            }
+            .form_css{
+                border: solid 1px white;
+                clear: both;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .load_css{
+                    clear: both;
+                    top: 14%;
+                    left: 5%;
+                    width: 99.90%;
+                    height: 106px;
+                    position: absolute;
+                    margin-top: 14%;
+                    margin-left: -44px;
+                    margin-bottom: 10px;
+                    border: solid 1px white;
+            }
+            #load_graph{
+                    clear: both;
+                    top: 7%;
+                    margin-top: 14%;
+                    margin-left: 1%;
+            }
+            #load_form{
+                    border: 1px solid white;
+                    height: auto;
+                    left: 20%;
+                    margin-left: -50px;
+                    margin-top: -50px;
+                    position: absolute;
+                    top: 10%;
+                    width: 70%;
+            }
+        </style>
+        <body style="background-color: #CB2026;">
+            <div id="load_form">
+                <span style="color: black; font-size: 25px;">
+                Problem Statement ::
+                Make a prediction about the price of oil for the next three and six months using the any open
+                source python ecosystem tools and deploy it in any public facing PaaS stack.
+                </span>
                 <!-- Upload form. Note enctype attribute! -->
-                <form action="/prediction/uploadsd/" method="post" enctype="multipart/form-data">
+                <form class="form_css" action="/prediction/uploadsd/" method="post"
+                      enctype="multipart/form-data">
                         {% csrf_token %}
                         <p>{{ form.erros }}</p>
                         <p>{{ form.non_field_errors }}</p>
@@ -18,19 +70,45 @@
                         </p>
                         <p><input type="submit" value="Upload" /></p>
                 </form>
-
-                <div id="load_oiltype"></div>
+                <div class="load_css" id="load_oiltype"></div>
+                <hr />
+                <div id="load_graph"></div>
+            </div>
         </body>
         <script>
-                $(document).ready(function (){
+                function laadFunction() {
+                    var oil_categorie_id = ($('#oil_categories').val());
                     $.ajax({
                       url: '/prediction/render/graph/',
+                      type: "get",
+                      data:{oil_id:oil_categorie_id},
+                      dataType: "text",
+                      success : function (data) {
+                        $("#load_graph").html(data);
+                      }
+                    });
+                    return true;
+                }
+                $(document).ready(function (){
+
+                    $(':radio').change(function (event) {
+                        var id = $(this).data('id');
+                        $('#' + id).addClass('none').siblings().removeClass('none');
+                    });
+
+                    $.ajax({
+                      url: '/prediction/loadoil/categories/',
                       type: "get",
                       dataType: "text",
                       success : function (data) {
                         $("#load_oiltype").html(data);
+                        laadFunction();
                       }
-                   });
+                    });
+
+                    $('#load_oiltype').change( function() {
+                        laadFunction();
+                    });
                 });
         </script>
 </html>
