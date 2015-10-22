@@ -129,7 +129,7 @@ class ProcessDataFrame():
         source_keys_list = []
 
         # Get get source kyes list from oil type/description
-        self.get_source_keys_list(oil_type_id)
+        self._get_source_keys_list(oil_type_id)
 
         for source_keys in self.source_keys_with_col:
             source_keys_list.insert(int(source_keys[1]), source_keys[0])
@@ -148,10 +148,10 @@ class ProcessDataFrame():
         ps_df = ps_df.dropna()
 
         # Call data type conversion method to convert respactive column values
-        ps_df = self.data_type_conversion(ps_df)
+        ps_df = self._data_type_conversion(ps_df)
 
         # Index the data set by date
-        df_index, self.df_len = self.df_index(ps_df)
+        df_index, self.df_len = self._df_index(ps_df)
 
         # Now remove 'Date' column which is not require for further
         # processing.
@@ -264,7 +264,7 @@ class ProcessDataFrame():
         df_last_date = self.df.index[-1]
 
         # Get start date
-        arma_predict_start_date = self.get_prediction_start_date(df_last_date)
+        arma_predict_start_date = self._get_prediction_start_date(df_last_date)
 
         # Plot Prediction grapg for number of months i.e. 3 and 6 from
         # settings configuration variable value.

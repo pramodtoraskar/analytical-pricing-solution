@@ -1,13 +1,19 @@
 <div>
-    <img class="all_data_graph img_width" src="{{graph_dict.all_data_path}}">
+    <img class="img_width" src="{{graph_dict.all_data_path}}">
     <hr style="width: 838px;"/>
-    <input type="radio" name='thing' value='valuable'data-id="three_month_graph" >
-    <span>Three Months </span>
+
     <input type="radio" name='thing' value='valuable' data-id="six_month_graph" />
-    <span>Six Months</span>
+    <span>Six Month</span>
+
+    <input type="radio" name='thing' value='valuable'data-id="three_month_graph" >
+    <span>Three Month</span>
+
+    <hr />
+
     <div id="three_month_graph" class="none">
         <img class="img_width" src="{{graph_dict.m3_forecast_data_path}}">
     </div>
+
     <div id="six_month_graph" class="none">
         <img class="img_width" src="{{graph_dict.m6_forecast_data_path}}">
     </div>

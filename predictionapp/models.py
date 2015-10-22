@@ -201,8 +201,8 @@ class ExcelToHdf5(object):
         :return: converted datetime date object
         """
 
-        xl_date = xlrd.xl_date_as_tuple(xl_date, data_book.datemode)
-        date = datetime.datetime(xl_date[0], xl_date[1], xl_date[2])
+        xl_date_obj = xlrd.xldate_as_tuple(xl_date, data_book.datemode)
+        date = datetime.datetime(xl_date_obj[0], xl_date_obj[1], xl_date_obj[2])
 
         return str(date)
 
