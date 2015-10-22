@@ -123,6 +123,6 @@ MEDIA_URL = '/media/'
 HDF5_FILENAME = os.path.join(BASE_DIR,
                              'analysisdjango/database/oil_production.h5')
 
-NAN_PIRCE_ROWNO_FOR_COIL = 18
-
 GRAPH_STORE_PATH = os.path.join(BASE_DIR, 'analysisdjango/media/plot_graph')
+
+PREDICTION_MONTH_COUNT = (3,6)

@@ -21,22 +21,28 @@ def render_graph(request):
                               {'oil_type_obj_list': oil_type_obj_list},
                               context_instance=RequestContext(request))
 
+
 def process_df(hdf5_filename):
 
-    oil_type_obj = OilType.objects.all()[0]
+    oil_type_obj_list = OilType.objects.all()#[0]
 
-    oil_type = str(re.sub('[^A-Za-z0-9]+', '',oil_type_obj.oil_type)).lower()
-    oil_of_series_count = oil_type_obj.of_series
+    for oil_type_obj in oil_type_obj_list:
 
-    pdf_obj = ProcessDataFrame(hdf5_filename, oil_type, oil_of_series_count)
+        oil_type = str(re.sub('[^A-Za-z0-9]+', '',
+                              oil_type_obj.oil_type)).lower()
 
-    pdf_obj.fetch_df()
+        oil_of_series_count = oil_type_obj.of_series
 
-    pdf_obj.process_seed_dataframe()
+        pdf_obj = ProcessDataFrame(hdf5_filename, oil_type, oil_of_series_count)
 
-    pdf_obj.plot_intial_graph(oil_type)
+        pdf_obj.fetch_df()
 
-    pdf_obj.prepare_peridication_sample_and_plot_graph(oil_type)
+        pdf_obj.process_seed_dataframe(oil_type_obj.id)
+
+        pdf_obj.plot_intial_graph(oil_type)
+
+        pdf_obj.prepare_peridication_sample_and_plot_graph(oil_type)
+
 
 def convert_data():
 
